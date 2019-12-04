@@ -14,4 +14,4 @@ These hooks and script, inhibit accidental system shutdown, reboot etc. when pac
 1. When `pacman` begins the upgrade, it calls a PreTransaction hook `00-50-systemd-inhibit.hook`. This hook puts an inhibition lock for shutdown, restart etc. with timeout of 15 minutes.
 1. When `pacman` finishes the upgrade, it calls a PostTransaction hook `zz-50-systemd-inhibit.hook`. This hook removes the inhibition lock.
 
-Note: In case pacman takes more than 15 minutes to upgrade (which is highly unlikely), then the inhibition lock gets removed, but pacman continues function normally.
+Note: In case pacman takes more than 15 minutes to upgrade (which is highly unlikely), then the inhibition lock gets removed, but pacman continues to function normally.

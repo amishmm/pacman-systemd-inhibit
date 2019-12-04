@@ -1,0 +1,16 @@
+#!/bin/sh -e
+
+systemd_live() {
+  if [ ! -d /run/systemd/system ]; then
+    echo >&2 "  Skipped: Current root is not booted."
+    exit 0
+  fi
+}
+
+case $1 in
+  inhibit-start) systemd_live; systemd-inhibit --what="shutdown:sleep:idle:handle-power-key:handle-suspend-key:handle-hibernate-key:handle-lid-switch" --who=pacman --why="Pacman is making changes to the system" --mode=block nohup /usr/bin/pacman-systemd-inhibit-sleep 900 > /dev/null 2>&1 & ;;
+  inhibit-stop)  systemd_live; killall -qe /usr/bin/pacman-systemd-inhibit-sleep || true ;;
+  *) echo >&2 "  Invalid operation '$1'"; exit 1 ;;
+esac
+
+exit 0

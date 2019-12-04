@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description=Permitting system shutdown, reboot etc.
+When = PostTransaction
+Exec = /usr/share/libalpm/scripts/systemd-inhibit-hook inhibit-stop

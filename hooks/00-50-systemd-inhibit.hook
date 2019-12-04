@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description=Inhibiting system shutdown, reboot etc.
+When = PreTransaction
+Exec = /usr/share/libalpm/scripts/systemd-inhibit-hook inhibit-start

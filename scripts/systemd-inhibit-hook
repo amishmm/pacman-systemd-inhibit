@@ -9,7 +9,25 @@ systemd_live() {
 
 case $1 in
   inhibit-start) systemd_live; systemd-inhibit --what="shutdown:sleep:idle:handle-power-key:handle-suspend-key:handle-hibernate-key:handle-lid-switch" --who=pacman --why="Pacman is making changes to the system" --mode=block nohup /usr/bin/pacman-systemd-inhibit-sleep 900 > /dev/null 2>&1 & ;;
-  inhibit-stop)  systemd_live; killall -qe /usr/bin/pacman-systemd-inhibit-sleep || true ;;
+  # Do **NOT** pass a path to `killall`
+  #
+  # When the name passed to `killall` contains a slash, it matches processes by
+  # executable file rather than by process name. Since
+  # `/usr/bin/pacman-systemd-inhibit-sleep` is a symlink to `/usr/bin/sleep`,
+  # this causes two problems:
+  #
+  # 1. If `coreutils` is updated in the transaction, `sleep` is replaced and
+  #    the process started by the `PreTransaction` hook still refers to the old
+  #    executable, while the pathname used by the `PostTransaction` hook
+  #    resolves to the new one. Consequently, `killall` misses the inhibiting
+  #    `sleep` process, leaving the inhibition active until its timeout or
+  #    until it is manually stopped.
+  # 2. It can also match unrelated processes executing the same `sleep`
+  #    executable. Since package transactions normally run as root, this kills
+  #    *any* of those processes that happen to be running.
+  #
+  # Use the basename to avoid executable-file matching.
+  inhibit-stop)  systemd_live; killall -qe pacman-systemd-inhibit-sleep || true ;;
   *) echo >&2 "  Invalid operation '$1'"; exit 1 ;;
 esac
 

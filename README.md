@@ -11,7 +11,7 @@ It also checks battery capacity and prevents system update when battery capacity
 1. Create a symlink file, `/usr/bin/pminhibit-sleep`, symlinked to `/usr/bin/sleep`
 1. Place hook files in `/usr/share/libalpm/hooks` directory.
 1. Place script file in `/usr/share/libalpm/scripts` directory.
-1. If required, configure battery capacity via /etc/pacman.d/battery.conf.
+1. If required, configure battery capacity via `/etc/pacman.d/battery.conf`.
 
 ## How it works?
 1. When `pacman` begins the upgrade, it calls a PreTransaction hook `00-50-systemd-inhibit.hook`. This hook puts an inhibition lock for shutdown, restart etc. with timeout of 15 minutes. It also checks if battery capacity is sufficient.

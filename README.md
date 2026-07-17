@@ -6,7 +6,7 @@ Accidental shutdown or reboot of the system when pacman is upgrading the system,
 These hooks and script, inhibit accidental system shutdown, reboot etc. when pacman is upgrading the system.
 
 ## How to install?
-1. Create a symlink file, `/usr/bin/pacman-systemd-inhibit-sleep`, symlinked to `/usr/bin/sleep`
+1. Create a symlink file, `/usr/bin/pminhibit-sleep`, symlinked to `/usr/bin/sleep`
 1. Place hook files in `/usr/share/libalpm/hooks` directory.
 1. Place script file in `/usr/share/libalpm/scripts` directory.
 

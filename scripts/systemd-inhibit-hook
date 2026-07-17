@@ -8,8 +8,8 @@ systemd_live() {
 }
 
 case $1 in
-  inhibit-start) systemd_live; systemd-inhibit --what="shutdown:sleep:idle:handle-power-key:handle-suspend-key:handle-hibernate-key:handle-lid-switch" --who=pacman --why="Pacman is making changes to the system" --mode=block nohup /usr/bin/pacman-systemd-inhibit-sleep 900 > /dev/null 2>&1 & ;;
-  inhibit-stop)  systemd_live; killall -qe /usr/bin/pacman-systemd-inhibit-sleep || true ;;
+  inhibit-start) systemd_live; systemd-inhibit --what="shutdown:sleep:idle:handle-power-key:handle-suspend-key:handle-hibernate-key:handle-lid-switch" --who=pacman --why="Pacman is making changes to the system" --mode=block nohup /usr/bin/pminhibit-sleep 900 > /dev/null 2>&1 & ;;
+  inhibit-stop)  systemd_live; pkill --pgroup 0 pminhibit-sleep || true ;;
   *) echo >&2 "  Invalid operation '$1'"; exit 1 ;;
 esac
 

@@ -8,4 +8,5 @@ Target = *
 [Action]
 Description=Inhibiting system shutdown, reboot etc.
 When = PreTransaction
+AbortOnFail
 Exec = /usr/share/libalpm/scripts/systemd-inhibit-hook inhibit-start

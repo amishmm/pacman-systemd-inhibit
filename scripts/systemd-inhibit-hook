@@ -7,8 +7,33 @@ systemd_live() {
   fi
 }
 
+battery_check() {
+  CONFIG_FILE="/etc/pacman.d/battery.conf"
+  [ -s "$CONFIG_FILE" ] && . "$CONFIG_FILE"
+  : "${BATTERY_MIN_CHARGE:=10}"
+  case "$BATTERY_MIN_CHARGE" in
+    ''|*[!0-9]*)
+      echo "  Error: Invalid BATTERY_MIN_CHARGE value: $BATTERY_MIN_CHARGE in $CONFIG_FILE" >&2
+      exit 1
+      ;;
+  esac
+  [ "$BATTERY_MIN_CHARGE" -gt 0 ] || return 0
+
+  for battery in /sys/class/power_supply/BAT*; do
+    [ -e "$battery" ] || return 0  # AC supply only
+    status=$(cat "$battery/status" 2>/dev/null)
+    [ "$status" = "Charging" ] || [ "$status" = "Full" ] && return 0
+    capacity=$(cat "$battery/capacity" 2>/dev/null)
+    if [ -n "$capacity" ] && [ "$capacity" -lt "$BATTERY_MIN_CHARGE" ]; then
+      echo "  Error: Battery at ${capacity}%. Please charge above ${BATTERY_MIN_CHARGE}% before updating the system." >&2
+      exit 1
+    fi
+    break
+  done
+}
+
 case $1 in
-  inhibit-start) systemd_live; systemd-inhibit --what="shutdown:sleep:idle:handle-power-key:handle-suspend-key:handle-hibernate-key:handle-lid-switch" --who=pacman --why="Pacman is making changes to the system" --mode=block nohup /usr/bin/pminhibit-sleep 900 > /dev/null 2>&1 & ;;
+  inhibit-start) systemd_live; battery_check; systemd-inhibit --what="shutdown:sleep:idle:handle-power-key:handle-suspend-key:handle-hibernate-key:handle-lid-switch" --who=pacman --why="Pacman is making changes to the system" --mode=block nohup /usr/bin/pminhibit-sleep 900 > /dev/null 2>&1 & ;;
   inhibit-stop)  systemd_live; pkill --pgroup 0 pminhibit-sleep || true ;;
   *) echo >&2 "  Invalid operation '$1'"; exit 1 ;;
 esac

@@ -1,6 +1,6 @@
 # pacman-systemd-inhibit
 
-Inhibit system shutdown, reboot etc. when pacman is upgrading the system.
+Inhibit system shutdown, reboot etc., when pacman is upgrading the system.
 
 If the system is accidentally shut down or rebooted while pacman is upgrading it, your system and/or packages may break. This can cause many issues, such as preventing your system from booting. These hooks and script inhibit an accidental system shutdown, reboot, etc., if pacman is upgrading your system.
 

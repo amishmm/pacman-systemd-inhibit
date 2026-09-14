@@ -4,13 +4,11 @@ Inhibit system shutdown, reboot etc. when pacman is upgrading the system.
 
 If the system is accidentally shut down or rebooted while pacman is upgrading it, your system and/or packages may break. This can cause many issues, such as preventing your system from booting. These hooks and script inhibit an accidental system shutdown, reboot, etc., if pacman is upgrading your system.
 
-
-
 It also checks battery capacity and prevents any system updates when the capacity is low. This check is not performed if the system is on AC supply.
 
 ## How To Install?
 
-## AUR
+### AUR
 
 Install `pacman-systemd-inhibit` from the AUR for an easy setup. See PKGBUILD [here](https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=pacman-systemd-inhibit).
 

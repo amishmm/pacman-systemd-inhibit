@@ -10,7 +10,7 @@ It also checks battery capacity and prevents any system updates when the capacit
 
 ### AUR
 
-Install `pacman-systemd-inhibit` from the AUR for an easy setup. See PKGBUILD [here](https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=pacman-systemd-inhibit).
+Install `pacman-systemd-inhibit` from AUR page [here](https://aur.archlinux.org/packages/pacman-systemd-inhibit) for an easy setup.
 
 ### Manual Configuration
 
